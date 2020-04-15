@@ -36,7 +36,7 @@
                 Culqi.publicKey = '{/literal}{$codigo_comercio|escape:'htmlall':'UTF-8'}{literal}';
 
                 Culqi.settings({
-                    title: '{/literal}{$shop_name|escape:'htmlall':'UTF-8'}{literal}',  
+                    title: '{/literal}{$shop_name|escape:'html':'UTF-8'}{literal}',  
                     currency: '{/literal}{$currency|escape:'htmlall':'UTF-8'}{literal}',
                     description: '{/literal}{$descripcion|escape:'htmlall':'UTF-8'}{literal}',
                     amount: ({/literal}{$total|escape:'htmlall':'UTF-8'}{literal})*100,            
@@ -197,7 +197,7 @@
                     Culqi.publicKey = '{/literal}{$codigo_comercio|escape:'htmlall':'UTF-8'}{literal}';
 
                     Culqi.settings({
-                        title: '{/literal}{$shop_name|escape:'htmlall':'UTF-8'}{literal}',  
+                        title: '{/literal}{$shop_name|escape:'html':'UTF-8'}{literal}',  
                         currency: '{/literal}{$currency|escape:'htmlall':'UTF-8'}{literal}',
                         description: '{/literal}{$descripcion|escape:'htmlall':'UTF-8'}{literal}',
                         amount: ({/literal}{$total|escape:'htmlall':'UTF-8'}{literal})*100          
