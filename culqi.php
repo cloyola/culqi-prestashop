@@ -191,7 +191,8 @@ class Culqi extends PaymentModule
 
         try {
 
-          $cart = $this->context->cart; 
+          $cart = $this->context->cart;
+          $deliveryAddress = new Address((int)$cart->id_address_delivery);
           $culqi = new Culqi\Culqi(array('api_key' => Configuration::get('CULQI_LLAVE_COMERCIO')));
 
           $order = $culqi->Orders->create(
@@ -204,7 +205,7 @@ class Culqi extends PaymentModule
                  "first_name"=> $this->context->customer->firstname,
                  "last_name" => $this->context->customer->lastname,
                  "email" => $this->context->customer->email, 
-                 "phone_number" => "+51945145282"
+                 "phone_number" => $this->getPhone($deliveryAddress)
                ),
                "confirm" => false,
                "expiration_date" => time() + Configuration::get('CULQI_ORDER_MAX_DURATION')*60*60  
