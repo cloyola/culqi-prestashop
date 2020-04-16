@@ -62,7 +62,8 @@ class Culqi extends PaymentModule
             $this->registerHook('payment') &&
             $this->registerHook('paymentReturn') &&
             Configuration::updateValue('CULQI_LLAVE_COMERCIO', '') &&
-            Configuration::updateValue('CULQI_CODIGO_COMERCIO', '')
+            Configuration::updateValue('CULQI_CODIGO_COMERCIO', '') &&
+            Configuration::updateValue('CULQI_URL_IMAGEN', '')
         );
     }
 
@@ -191,8 +192,9 @@ class Culqi extends PaymentModule
 
         try {
 
-          $cart = $this->context->cart;
+          $cart = $this->context->cart; 
           $deliveryAddress = new Address((int)$cart->id_address_delivery);
+          
           $culqi = new Culqi\Culqi(array('api_key' => Configuration::get('CULQI_LLAVE_COMERCIO')));
 
           $order = $culqi->Orders->create(
@@ -322,6 +324,7 @@ class Culqi extends PaymentModule
         || !Configuration::deleteByName('CULQI_STATE_EXPIRED')
         || !Configuration::deleteByName('CULQI_LLAVE_COMERCIO')
         || !Configuration::deleteByName('CULQI_CODIGO_COMERCIO') 
+        || !Configuration::deleteByName('CULQI_URL_IMAGEN') 
         || !Configuration::deleteByName('CULQI_ENABLED_MULTIPAYMENT')           
         || !Configuration::deleteByName('CULQI_ORDER_MAX_DURATION')   
         || !$this->uninstallStates())
@@ -482,6 +485,15 @@ class Culqi extends PaymentModule
                         'required' => true
                     ), 
                     array(
+                        'type' => 'text',
+                        'label' => $this->l('URL de imagen cargada en Culqi'),
+                        'desc' => 'Colocar la misma URL de imagen que ya se configuró en el panel de Culqi. Búscala en tu panel de <a target="_blank" href="https://integ-panel.culqi.com/">Integración</a> o <a target="_blank" href="https://panel.culqi.com/">Producción</a>',
+                        'name' => 'CULQI_URL_IMAGEN', 
+                        'hint' => 'Colocar la misma URL de imagen que ya se configuró en el panel de Culqi', 
+                        'desc' => 'Ejemplo: https://www.mitienda.com/img/logo_culqi.png',
+                        'required' => true
+                    ), 
+                    array(
                         'type' => 'switch',  
                         'label' => $this->l('Habilitar pago con efectivo (BETA)'), 
                         'desc' => 'Permite habilitar el modo multipagos de Culqi. Aceptar tarjetas de crédito/débito y pagos en efectivo. Más información <a target="_blank" href="https://culqi.com/docs/#/multipagos/inicio">aquí</a>',
@@ -552,6 +564,7 @@ class Culqi extends PaymentModule
         return array(
             'CULQI_LLAVE_COMERCIO' => Tools::getValue('CULQI_LLAVE_COMERCIO', Configuration::get('CULQI_LLAVE_COMERCIO')),
             'CULQI_CODIGO_COMERCIO' => Tools::getValue('CULQI_CODIGO_COMERCIO', Configuration::get('CULQI_CODIGO_COMERCIO')), 
+            'CULQI_URL_IMAGEN' => Tools::getValue('CULQI_URL_IMAGEN', Configuration::get('CULQI_URL_IMAGEN')), 
             'CULQI_ENABLED_MULTIPAYMENT' => Tools::getValue('CULQI_ENABLED_MULTIPAYMENT', Configuration::get('CULQI_ENABLED_MULTIPAYMENT')), 
             'CULQI_ORDER_MAX_DURATION' => Tools::getValue('CULQI_ORDER_MAX_DURATION', Configuration::get('CULQI_ORDER_MAX_DURATION')), 
             'CULQI_ORDER_WEBHOOK' => Tools::getValue('CULQI_ORDER_WEBHOOK', _PS_BASE_URL_.__PS_BASE_URI__."modules/culqi/culqi_webhook.php")           
@@ -564,7 +577,8 @@ class Culqi extends PaymentModule
         if (Tools::isSubmit('btnSubmit'))
         {
             Configuration::updateValue('CULQI_LLAVE_COMERCIO', Tools::getValue('CULQI_LLAVE_COMERCIO'));
-            Configuration::updateValue('CULQI_CODIGO_COMERCIO', Tools::getValue('CULQI_CODIGO_COMERCIO'));
+            Configuration::updateValue('CULQI_CODIGO_COMERCIO', Tools::getValue('CULQI_CODIGO_COMERCIO'));  
+            Configuration::updateValue('CULQI_URL_IMAGEN', Tools::getValue('CULQI_URL_IMAGEN'));
             Configuration::updateValue('CULQI_ENABLED_MULTIPAYMENT', Tools::getValue('CULQI_ENABLED_MULTIPAYMENT'));
             Configuration::updateValue('CULQI_ORDER_MAX_DURATION', Tools::getValue('CULQI_ORDER_MAX_DURATION'));
         }

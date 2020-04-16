@@ -53,6 +53,7 @@ class CulqiPaymentModuleFrontController extends ModuleFrontController
         // Config values
         $this->context->smarty->assign('codigo_comercio', Configuration::get('CULQI_CODIGO_COMERCIO'));
         $this->context->smarty->assign('multipayment_enable', Configuration::get('CULQI_ENABLED_MULTIPAYMENT'));
+        $this->context->smarty->assign('url_imagen', Configuration::get('CULQI_URL_IMAGEN'));  
         $this->setTemplate('payment_execution.tpl');
     }
 

@@ -30,11 +30,14 @@
         {if $multipayment_enable}
             {literal}
             <script>  
-
                 console.log('Multipagos habilitados');
-
+                
                 Culqi.publicKey = '{/literal}{$codigo_comercio|escape:'htmlall':'UTF-8'}{literal}';
-
+                Culqi.options({
+                  style:{
+                    logo: "{/literal}{$url_imagen|escape:'htmlall':'UTF-8'}{literal}"
+                  }
+                });
                 Culqi.settings({
                     title: '{/literal}{$shop_name|escape:'html':'UTF-8'}{literal}',  
                     currency: '{/literal}{$currency|escape:'htmlall':'UTF-8'}{literal}',
@@ -193,9 +196,14 @@
         {else}
              {literal}
                 <script>
+                    console.log('Multipagos deshabilitados');
 
                     Culqi.publicKey = '{/literal}{$codigo_comercio|escape:'htmlall':'UTF-8'}{literal}';
-
+                    Culqi.options({
+                      style:{
+                        logo: "{/literal}{$url_imagen|escape:'htmlall':'UTF-8'}{literal}"
+                      }
+                    });
                     Culqi.settings({
                         title: '{/literal}{$shop_name|escape:'html':'UTF-8'}{literal}',  
                         currency: '{/literal}{$currency|escape:'htmlall':'UTF-8'}{literal}',
@@ -289,10 +297,4 @@
              {/literal}  
 
         {/if}
-        
-        
-
-
-
-
         
