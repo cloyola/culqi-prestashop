@@ -9,7 +9,7 @@ namespace Culqi;
  */
 class Customers extends Resource {
 
-    const URL_CUSTOMERS = "/customers/";
+    const URL_CUSTOMERS = '/customers/';
 
     /**
      * @param array|null $options
@@ -17,7 +17,7 @@ class Customers extends Resource {
      * @return all Customers.
      */
     public function all($options = NULL) {
-        return $this->request("GET", self::URL_CUSTOMERS, $api_key = $this->culqi->api_key, $options);
+        return $this->request('GET', self::URL_CUSTOMERS, $api_key = $this->culqi->api_key, $options);
     }
 
     /**
@@ -26,7 +26,7 @@ class Customers extends Resource {
      * @return create Customer response.
      */
     public function create($options = NULL) {
-        return $this->request("POST", self::URL_CUSTOMERS, $api_key = $this->culqi->api_key, $options);
+        return $this->request('POST', self::URL_CUSTOMERS, $api_key = $this->culqi->api_key, $options);
     }
 
     /**
@@ -35,7 +35,7 @@ class Customers extends Resource {
      * @return delete a Customer response.
      */
     public function delete($id = NULL) {
-       return $this->request("DELETE", self::URL_CUSTOMERS . $id . "/", $api_key = $this->culqi->api_key);
+       return $this->request('DELETE', self::URL_CUSTOMERS . $id . '/', $api_key = $this->culqi->api_key);
     }
 
     /**
@@ -44,7 +44,7 @@ class Customers extends Resource {
      * @return get a Customer.
      */
     public function get($id = NULL) {
-        return $this->request("GET", self::URL_CUSTOMERS . $id . "/", $api_key = $this->culqi->api_key);
+        return $this->request('GET', self::URL_CUSTOMERS . $id . '/', $api_key = $this->culqi->api_key);
     }
 
     /**
@@ -54,7 +54,7 @@ class Customers extends Resource {
      * @return update Charge response.
      */
     public function update($id = NULL, $options = NULL) {
-        return $this->request("PATCH", self::URL_CUSTOMERS . $id . "/", $api_key = $this->culqi->api_key, $options);
+        return $this->request('PATCH', self::URL_CUSTOMERS . $id . '/', $api_key = $this->culqi->api_key, $options);
     }
 
 }

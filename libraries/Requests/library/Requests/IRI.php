@@ -154,7 +154,7 @@ class Requests_IRI {
 	 */
 	public function __set($name, $value) {
 		if (method_exists($this, 'set_' . $name)) {
-			call_user_func(array($this, 'set_' . $name), $value);
+			$this->{'set_' . $name}($value);
 		}
 		elseif (
 			   $name === 'iauthority'
@@ -164,7 +164,7 @@ class Requests_IRI {
 			|| $name === 'iquery'
 			|| $name === 'ifragment'
 		) {
-			call_user_func(array($this, 'set_' . substr($name, 1)), $value);
+			$this->{'set_' . substr($name, 1)}($value);
 		}
 	}
 
@@ -209,9 +209,7 @@ class Requests_IRI {
 		if ($return === null && isset($this->normalization[$this->scheme][$name])) {
 			return $this->normalization[$this->scheme][$name];
 		}
-		else {
-			return $return;
-		}
+		return $return;
 	}
 
 	/**
@@ -231,7 +229,7 @@ class Requests_IRI {
 	 */
 	public function __unset($name) {
 		if (method_exists($this, 'set_' . $name)) {
-			call_user_func(array($this, 'set_' . $name), '');
+			$this->{'set_' . $name}('');
 		}
 	}
 
@@ -254,7 +252,7 @@ class Requests_IRI {
 	 * @return IRI|false
 	 */
 	public static function absolutize($base, $relative) {
-		if (!($relative instanceof Requests_IRI)) {
+		if (!($relative instanceof self)) {
 			$relative = new Requests_IRI($relative);
 		}
 		if (!$relative->is_valid()) {
@@ -264,7 +262,7 @@ class Requests_IRI {
 			return clone $relative;
 		}
 
-		if (!($base instanceof Requests_IRI)) {
+		if (!($base instanceof self)) {
 			$base = new Requests_IRI($base);
 		}
 		if ($base->scheme === null || !$base->is_valid()) {
@@ -283,7 +281,7 @@ class Requests_IRI {
 				$target->ihost = $base->ihost;
 				$target->port = $base->port;
 				if ($relative->ipath !== '') {
-					if ($relative->ipath[0] === '/') {
+					if (strpos($relative->ipath, '/') === 0) {
 						$target->ipath = $relative->ipath;
 					}
 					elseif (($base->iuserinfo !== null || $base->ihost !== null || $base->port !== null) && $base->ipath === '') {
@@ -494,16 +492,16 @@ class Requests_IRI {
 				// Invalid sequences
 				!$valid
 				// Non-shortest form sequences are invalid
-				|| $length > 1 && $character <= 0x7F
-				|| $length > 2 && $character <= 0x7FF
-				|| $length > 3 && $character <= 0xFFFF
+				|| ($length > 1 && $character <= 0x7F)
+				|| ($length > 2 && $character <= 0x7FF)
+				|| ($length > 3 && $character <= 0xFFFF)
 				// Outside of range of ucschar codepoints
 				// Noncharacters
 				|| ($character & 0xFFFE) === 0xFFFE
-				|| $character >= 0xFDD0 && $character <= 0xFDEF
-				|| (
+				|| ($character >= 0xFDD0 && $character <= 0xFDEF)
+				|| ((
 					// Everything else not in ucschar
-					   $character > 0xD7FF && $character < 0xF900
+					   ($character > 0xD7FF && $character < 0xF900)
 					|| $character < 0xA0
 					|| $character > 0xEFFFD
 				)
@@ -512,7 +510,7 @@ class Requests_IRI {
 					   !$iprivate
 					|| $character < 0xE000
 					|| $character > 0x10FFFD
-				)
+				))
 			) {
 				// If we were a character, pretend we weren't, but rather an error.
 				if ($valid) {
@@ -614,22 +612,22 @@ class Requests_IRI {
 					// Invalid sequences
 					!$valid
 					// Non-shortest form sequences are invalid
-					|| $length > 1 && $character <= 0x7F
-					|| $length > 2 && $character <= 0x7FF
-					|| $length > 3 && $character <= 0xFFFF
+					|| ($length > 1 && $character <= 0x7F)
+					|| ($length > 2 && $character <= 0x7FF)
+					|| ($length > 3 && $character <= 0xFFFF)
 					// Outside of range of iunreserved codepoints
 					|| $character < 0x2D
 					|| $character > 0xEFFFD
 					// Noncharacters
 					|| ($character & 0xFFFE) === 0xFFFE
-					|| $character >= 0xFDD0 && $character <= 0xFDEF
+					|| ($character >= 0xFDD0 && $character <= 0xFDEF)
 					// Everything else not in iunreserved (this is all BMP)
 					|| $character === 0x2F
-					|| $character > 0x39 && $character < 0x41
-					|| $character > 0x5A && $character < 0x61
-					|| $character > 0x7A && $character < 0x7E
-					|| $character > 0x7E && $character < 0xA0
-					|| $character > 0xD7FF && $character < 0xF900
+					|| ($character > 0x39 && $character < 0x41)
+					|| ($character > 0x5A && $character < 0x61)
+					|| ($character > 0x7A && $character < 0x7E)
+					|| ($character > 0x7E && $character < 0xA0)
+					|| ($character > 0xD7FF && $character < 0xF900)
 				) {
 					for ($j = $start; $j <= $i; $j++) {
 						$string .= '%' . strtoupper($bytes[$j]);
@@ -860,7 +858,7 @@ class Requests_IRI {
 			$this->ihost = null;
 			return true;
 		}
-		if (substr($ihost, 0, 1) === '[' && substr($ihost, -1) === ']') {
+		if (strpos($ihost, '[') === 0 && substr($ihost, -1) === ']') {
 			if (Requests_IPv6::check_ipv6(substr($ihost, 1, -1))) {
 				$this->ihost = '[' . Requests_IPv6::compress(substr($ihost, 1, -1)) . ']';
 			}
@@ -1077,8 +1075,6 @@ class Requests_IRI {
 		if (is_string($iauthority)) {
 			return $this->to_uri($iauthority);
 		}
-		else {
-			return $iauthority;
-		}
+		return $iauthority;
 	}
 }

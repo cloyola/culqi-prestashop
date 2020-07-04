@@ -62,11 +62,9 @@ class Requests_SSL {
 
 		// Fall back to checking the common name if we didn't get any dNSName
 		// alt names, as per RFC2818
-		if (!$has_dns_alt && !empty($cert['subject']['CN'])) {
-			// Check for a match
-			if (self::match_domain($host, $cert['subject']['CN']) === true) {
-				return true;
-			}
+		// Check for a match
+		if (!$has_dns_alt && !empty($cert['subject']['CN']) && self::match_domain($host, $cert['subject']['CN']) === true) {
+			return true;
 		}
 
 		return false;

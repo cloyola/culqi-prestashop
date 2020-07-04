@@ -14,11 +14,11 @@ class Culqi
     /**
     * La versión de API usada
     */
-    const API_VERSION = "v2.0";
+    const API_VERSION = 'v2.0';
     /**
      * La URL Base por defecto
      */
-    const BASE_URL = "https://api.culqi.com/v2";
+    const BASE_URL = 'https://api.culqi.com/v2';
     /**
      * Constructor.
      *
@@ -26,12 +26,12 @@ class Culqi
      *
      * @throws Error\InvalidApiKey
      *
-     * @example array('api_key' => "{api_key}")
+     * @example array('api_key' => '{api_key}')
      *
      */
     public function __construct($options)
     {
-        $this->api_key = $options["api_key"];
+        $this->api_key = $options['api_key'];
         if (!$this->api_key) {
           throw new Errors\InvalidApiKey();
         }

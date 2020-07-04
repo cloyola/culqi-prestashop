@@ -9,7 +9,7 @@ namespace Culqi;
  */
 class Tokens extends Resource {
 
-    const URL_TOKENS = "/tokens/";
+    const URL_TOKENS = '/tokens/';
 
     /**
      * @param array|string|null $options
@@ -17,7 +17,7 @@ class Tokens extends Resource {
      * @return all Tokens.
      */
     public function all($options = NULL) {
-        return $this->request("GET", self::URL_TOKENS, $api_key = $this->culqi->api_key, $options);
+        return $this->request('GET', self::URL_TOKENS, $api_key = $this->culqi->api_key, $options);
     }
 
     /**
@@ -26,7 +26,7 @@ class Tokens extends Resource {
      * @return create Token response.
      */
     public function create($options = NULL) {
-        return $this->request("POST", self::URL_TOKENS, $api_key = $this->culqi->api_key, $options);
+        return $this->request('POST', self::URL_TOKENS, $api_key = $this->culqi->api_key, $options);
     }
 
     /**
@@ -35,7 +35,7 @@ class Tokens extends Resource {
      * @return get a Token.
      */
     public function get($id = NULL) {
-        return $this->request("GET", self::URL_TOKENS . $id . "/", $api_key = $this->culqi->api_key);
+        return $this->request('GET', self::URL_TOKENS . $id . '/', $api_key = $this->culqi->api_key);
     }
 
     /**
@@ -45,7 +45,7 @@ class Tokens extends Resource {
      * @return update Token response.
      */
     public function update($id = NULL, $options = NULL) {
-        return $this->request("PATCH", self::URL_TOKENS . $id . "/", $api_key = $this->culqi->api_key, $options);
+        return $this->request('PATCH', self::URL_TOKENS . $id . '/', $api_key = $this->culqi->api_key, $options);
     }
 
 }

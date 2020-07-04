@@ -142,8 +142,8 @@ class Requests {
 		}
 
 		$file = str_replace('_', '/', $class);
-		if (file_exists(dirname(__FILE__) . '/' . $file . '.php')) {
-			require_once(dirname(__FILE__) . '/' . $file . '.php');
+		if (file_exists(__DIR__ . '/' . $file . '.php')) {
+			require_once(__DIR__ . '/' . $file . '.php');
 		}
 	}
 
@@ -204,7 +204,7 @@ class Requests {
 				continue;
 			}
 
-			$result = call_user_func(array($class, 'test'), $capabilities);
+			$result = $class->test($capabilities);
 			if ($result) {
 				self::$transport[$cap_string] = $class;
 				break;
@@ -518,7 +518,7 @@ class Requests {
 			'idn' => true,
 			'hooks' => null,
 			'transport' => null,
-			'verify' => Requests::get_certificate_path(),
+			'verify' => self::get_certificate_path(),
 			'verifyname' => true,
 		);
 		if ($multirequest !== false) {
@@ -533,11 +533,11 @@ class Requests {
 	 * @return string Default certificate path.
 	 */
 	public static function get_certificate_path() {
-		if ( ! empty( Requests::$certificate_path ) ) {
-			return Requests::$certificate_path;
+		if ( ! empty( self::$certificate_path ) ) {
+			return self::$certificate_path;
 		}
 
-		return dirname(__FILE__) . '/Requests/Transport/cacert.pem';
+		return __DIR__ . '/Requests/Transport/cacert.pem';
 	}
 
 	/**
@@ -546,7 +546,7 @@ class Requests {
 	 * @param string $path Certificate path, pointing to a PEM file.
 	 */
 	public static function set_certificate_path( $path ) {
-		Requests::$certificate_path = $path;
+		self::$certificate_path = $path;
 	}
 
 	/**
@@ -602,7 +602,7 @@ class Requests {
 		$type = strtoupper($type);
 
 		if (!isset($options['data_format'])) {
-			if (in_array($type, array(self::HEAD, self::GET, self::DELETE))) {
+			if (in_array($type, array(self::HEAD, self::GET, self::DELETE), true)) {
 				$options['data_format'] = 'query';
 			}
 			else {
@@ -707,7 +707,8 @@ class Requests {
 				$redirected->history[] = $return;
 				return $redirected;
 			}
-			elseif ($options['redirected'] >= $options['redirects']) {
+
+			if ($options['redirected'] >= $options['redirects']) {
 				throw new Requests_Exception('Too many redirects', 'toomanyredirects', $return);
 			}
 		}
@@ -821,7 +822,7 @@ class Requests {
 	 * @return string Decompressed string
 	 */
 	public static function decompress($data) {
-		if (substr($data, 0, 2) !== "\x1f\x8b" && substr($data, 0, 2) !== "\x78\x9c") {
+		if (strpos($data, "\x1f\x8b") !== 0 && strpos($data, "\x78\x9c") !== 0) {
 			// Not actually compressed. Probably cURL ruining this for us.
 			return $data;
 		}
@@ -829,13 +830,11 @@ class Requests {
 		if (function_exists('gzdecode') && ($decoded = @gzdecode($data)) !== false) {
 			return $decoded;
 		}
-		elseif (function_exists('gzinflate') && ($decoded = @gzinflate($data)) !== false) {
+		if (function_exists('gzinflate') && ($decoded = @gzinflate($data)) !== false) {
 			return $decoded;
-		}
-		elseif (($decoded = self::compatible_gzinflate($data)) !== false) {
+		} elseif (($decoded = self::compatible_gzinflate($data)) !== false) {
 			return $decoded;
-		}
-		elseif (function_exists('gzuncompress') && ($decoded = @gzuncompress($data)) !== false) {
+		} elseif (function_exists('gzuncompress') && ($decoded = @gzuncompress($data)) !== false) {
 			return $decoded;
 		}
 
@@ -865,13 +864,13 @@ class Requests {
 	public static function compatible_gzinflate($gzData) {
 		// Compressed data might contain a full zlib header, if so strip it for
 		// gzinflate()
-		if (substr($gzData, 0, 3) == "\x1f\x8b\x08") {
+		if (strpos($gzData, "\x1f\x8b\x08") === 0) {
 			$i = 10;
-			$flg = ord(substr($gzData, 3, 1));
+			$flg = ord($gzData[3]);
 			if ($flg > 0) {
 				if ($flg & 4) {
 					list($xlen) = unpack('v', substr($gzData, $i, 2));
-					$i = $i + 2 + $xlen;
+					$i += 2 + $xlen;
 				}
 				if ($flg & 8) {
 					$i = strpos($gzData, "\0", $i) + 1;
@@ -880,7 +879,7 @@ class Requests {
 					$i = strpos($gzData, "\0", $i) + 1;
 				}
 				if ($flg & 2) {
-					$i = $i + 2;
+					$i += 2;
 				}
 			}
 			$decompressed = self::compatible_gzinflate(substr($gzData, $i));
@@ -909,13 +908,11 @@ class Requests {
 			$huffman_encoded = true;
 		}
 
-		if ($huffman_encoded) {
-			if (false !== ($decompressed = @gzinflate(substr($gzData, 2)))) {
-				return $decompressed;
-			}
+		if ($huffman_encoded && false !== ($decompressed = @gzinflate(substr($gzData, 2)))) {
+			return $decompressed;
 		}
 
-		if ("\x50\x4b\x03\x04" == substr($gzData, 0, 4)) {
+		if (strpos($gzData, "\x50\x4b\x03\x04") === 0) {
 			// ZIP file format header
 			// Offset 6: 2 bytes, General-purpose field
 			// Offset 26: 2 bytes, filename length

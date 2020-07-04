@@ -184,7 +184,7 @@ class Requests_Transport_fsockopen implements Requests_Transport {
 			$out .= sprintf("User-Agent: %s\r\n", $options['useragent']);
 		}
 
-		$accept_encoding = $this->accept_encoding();
+		$accept_encoding = self::accept_encoding();
 		if (!isset($case_insensitive_headers['Accept-Encoding']) && !empty($accept_encoding)) {
 			$out .= sprintf("Accept-Encoding: %s\r\n", $accept_encoding);
 		}
@@ -192,7 +192,7 @@ class Requests_Transport_fsockopen implements Requests_Transport {
 		$headers = Requests::flatten($headers);
 
 		if (!empty($headers)) {
-			$out .= implode($headers, "\r\n") . "\r\n";
+			$out .= implode("\r\n", $headers) . "\r\n";
 		}
 
 		$options['hooks']->dispatch('fsockopen.after_headers', array(&$out));

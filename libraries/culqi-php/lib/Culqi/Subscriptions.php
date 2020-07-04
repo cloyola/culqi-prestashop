@@ -9,7 +9,7 @@ namespace Culqi;
  */
 class Subscriptions extends Resource {
 
-    const URL_SUBSCRIPTIONS = "/subscriptions/";
+    const URL_SUBSCRIPTIONS = '/subscriptions/';
 
     /**
      * @param array|null $options
@@ -17,7 +17,7 @@ class Subscriptions extends Resource {
      * @return all Subscriptions.
      */
     public function all($options = NULL) {
-        return $this->request("GET", self::URL_SUBSCRIPTIONS, $api_key = $this->culqi->api_key, $options);
+        return $this->request('GET', self::URL_SUBSCRIPTIONS, $api_key = $this->culqi->api_key, $options);
     }
 
     /**
@@ -26,7 +26,7 @@ class Subscriptions extends Resource {
      * @return create Subscription response.
      */
     public function create($options = NULL) {
-        return $this->request("POST", self::URL_SUBSCRIPTIONS, $api_key = $this->culqi->api_key, $options);
+        return $this->request('POST', self::URL_SUBSCRIPTIONS, $api_key = $this->culqi->api_key, $options);
     }
 
     /**
@@ -35,7 +35,7 @@ class Subscriptions extends Resource {
      * @return delete a Subscription response.
      */
     public function delete($id = NULL) {
-       return $this->request("DELETE", self::URL_SUBSCRIPTIONS . $id . "/", $api_key = $this->culqi->api_key);
+       return $this->request('DELETE', self::URL_SUBSCRIPTIONS . $id . '/', $api_key = $this->culqi->api_key);
     }
 
     /**
@@ -44,7 +44,7 @@ class Subscriptions extends Resource {
      * @return get a Subscription.
      */
     public function get($id = NULL) {
-        return $this->request("GET", self::URL_SUBSCRIPTIONS . $id . "/", $api_key = $this->culqi->api_key);
+        return $this->request('GET', self::URL_SUBSCRIPTIONS . $id . '/', $api_key = $this->culqi->api_key);
     }
 
     /**
@@ -54,7 +54,7 @@ class Subscriptions extends Resource {
      * @return update Subscription response.
      */
     public function update($id = NULL, $options = NULL) {
-        return $this->request("PATCH", self::URL_SUBSCRIPTIONS . $id . "/", $api_key = $this->culqi->api_key, $options);
+        return $this->request('PATCH', self::URL_SUBSCRIPTIONS . $id . '/', $api_key = $this->culqi->api_key, $options);
     }
 
 }

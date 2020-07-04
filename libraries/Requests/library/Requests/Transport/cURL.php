@@ -134,18 +134,9 @@ class Requests_Transport_cURL implements Requests_Transport {
 
 		$options['hooks']->dispatch('curl.before_send', array(&$this->handle));
 
-		if ($options['filename'] !== false) {
-			$this->stream_handle = fopen($options['filename'], 'wb');
-		}
+		$this->validateResponseData($options);
 
-		$this->response_data = '';
-		$this->response_bytes = 0;
-		$this->response_byte_limit = false;
-		if ($options['max_bytes'] !== false) {
-			$this->response_byte_limit = $options['max_bytes'];
-		}
-
-		if (isset($options['verify'])) {
+        if (isset($options['verify'])) {
 			if ($options['verify'] === false) {
 				curl_setopt($this->handle, CURLOPT_SSL_VERIFYHOST, 0);
 				curl_setopt($this->handle, CURLOPT_SSL_VERIFYPEER, 0);
@@ -283,16 +274,7 @@ class Requests_Transport_cURL implements Requests_Transport {
 	public function &get_subrequest_handle($url, $headers, $data, $options) {
 		$this->setup_handle($url, $headers, $data, $options);
 
-		if ($options['filename'] !== false) {
-			$this->stream_handle = fopen($options['filename'], 'wb');
-		}
-
-		$this->response_data = '';
-		$this->response_bytes = 0;
-		$this->response_byte_limit = false;
-		if ($options['max_bytes'] !== false) {
-			$this->response_byte_limit = $options['max_bytes'];
-		}
+		$this->validateResponseData($options);
 		$this->hooks = $options['hooks'];
 
 		return $this->handle;
@@ -522,6 +504,7 @@ class Requests_Transport_cURL implements Requests_Transport {
 	 * Whether this transport is valid
 	 *
 	 * @codeCoverageIgnore
+	 * @param array $capabilities
 	 * @return boolean True if the transport is valid, false otherwise.
 	 */
 	public static function test($capabilities = array()) {
@@ -539,4 +522,20 @@ class Requests_Transport_cURL implements Requests_Transport {
 
 		return true;
 	}
+	/**
+     * @param $options
+     */
+    private function validateResponseData($options)
+    {
+        if ($options['filename'] !== false) {
+            $this->stream_handle = fopen($options['filename'], 'wb');
+        }
+
+        $this->response_data = '';
+        $this->response_bytes = 0;
+        $this->response_byte_limit = false;
+        if ($options['max_bytes'] !== false) {
+            $this->response_byte_limit = $options['max_bytes'];
+        }
+    }
 }

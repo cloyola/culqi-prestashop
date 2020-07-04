@@ -9,7 +9,7 @@ namespace Culqi;
  */
 class Events extends Resource {
 
-  const URL_EVENTS = "/events/";
+  const URL_EVENTS = '/events/';
 
   /**
    * @param array|null $options
@@ -17,7 +17,7 @@ class Events extends Resource {
    * @return all Events.
   */
   public function all($options = NULL) {
-      return $this->request("GET", self::URL_EVENTS, $api_key = $this->culqi->api_key, $options);
+      return $this->request('GET', self::URL_EVENTS, $api_key = $this->culqi->api_key, $options);
   }
 
   /**
@@ -26,7 +26,7 @@ class Events extends Resource {
    * @return get a Event.
   */
   public function get($id = NULL) {
-      return $this->request("GET", self::URL_EVENTS . $id . "/", $api_key = $this->culqi->api_key);
+      return $this->request('GET', self::URL_EVENTS . $id . '/', $api_key = $this->culqi->api_key);
   }
 
 }

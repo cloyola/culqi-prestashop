@@ -9,7 +9,7 @@ namespace Culqi;
  */
 class Iins extends Resource {
 
-    const URL_IINS = "/iins/";
+    const URL_IINS = '/iins/';
 
     /**
      * @param array|null $options
@@ -17,7 +17,7 @@ class Iins extends Resource {
      * @return all Iins.
      */
     public function all($options = NULL) {
-        return $this->request("GET", self::URL_IINS, $api_key = $this->culqi->api_key, $options);
+        return $this->request('GET', self::URL_IINS, $api_key = $this->culqi->api_key, $options);
     }
 
     /**
@@ -26,7 +26,7 @@ class Iins extends Resource {
      * @return get a Iin.
      */
     public function get($id = NULL) {
-        return $this->request("GET", self::URL_IINS . $id . "/", $api_key = $this->culqi->api_key);
+        return $this->request('GET', self::URL_IINS . $id . '/', $api_key = $this->culqi->api_key);
     }
 
 }

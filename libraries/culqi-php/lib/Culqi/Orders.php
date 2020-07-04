@@ -9,7 +9,7 @@ namespace Culqi;
  */
 class Orders extends Resource {
 
-    const URL_ORDERS = "/orders/";
+    const URL_ORDERS = '/orders/';
 
     /**
      * @param array|null $options
@@ -17,7 +17,7 @@ class Orders extends Resource {
      * @return Get all Orders
      */
     public function all($options) {
-        return $this->request("GET", self::URL_ORDERS, $api_key = $this->culqi->api_key, $options);
+        return $this->request('GET', self::URL_ORDERS, $api_key = $this->culqi->api_key, $options);
     }
 
     /**
@@ -26,7 +26,7 @@ class Orders extends Resource {
      * @return create Order 
      */
     public function create($options = NULL) {
-        return $this->request("POST", self::URL_ORDERS, $api_key = $this->culqi->api_key, $options);
+        return $this->request('POST', self::URL_ORDERS, $api_key = $this->culqi->api_key, $options);
     } 
 
 
@@ -36,7 +36,7 @@ class Orders extends Resource {
      * @return confirm Order 
      */
     public function confirm($id = NULL) {
-        return $this->request("POST", self::URL_ORDERS . $id . "/confirm/", $api_key = $this->culqi->api_key);
+        return $this->request('POST', self::URL_ORDERS . $id . '/confirm/', $api_key = $this->culqi->api_key);
     }
 
     /**
@@ -45,7 +45,7 @@ class Orders extends Resource {
      * @return get a Order
      */
     public function get($id) {
-        return $this->request("GET", self::URL_ORDERS . $id . "/", $api_key = $this->culqi->api_key);
+        return $this->request('GET', self::URL_ORDERS . $id . '/', $api_key = $this->culqi->api_key);
     }
 
     /**
@@ -54,7 +54,7 @@ class Orders extends Resource {
      * @return delete a Order
      */
     public function delete($id) {
-        return $this->request("DELETE", self::URL_ORDERS . $id . "/", $api_key = $this->culqi->api_key);
+        return $this->request('DELETE', self::URL_ORDERS . $id . '/', $api_key = $this->culqi->api_key);
     }
 
     /**
@@ -64,7 +64,7 @@ class Orders extends Resource {
      * @return update Order
      */
     public function update($id = NULL, $options = NULL) {
-        return $this->request("PATCH", self::URL_ORDERS . $id . "/", $api_key = $this->culqi->api_key, $options);
+        return $this->request('PATCH', self::URL_ORDERS . $id . '/', $api_key = $this->culqi->api_key, $options);
     }
 
 }

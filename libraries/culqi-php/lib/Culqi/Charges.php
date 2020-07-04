@@ -9,7 +9,7 @@ namespace Culqi;
  */
 class Charges extends Resource {
 
-    const URL_CHARGES = "/charges/";
+    const URL_CHARGES = '/charges/';
 
     /**
      * @param array|null $options
@@ -17,7 +17,7 @@ class Charges extends Resource {
      * @return all Charges.
      */
     public function all($options = NULL) {
-        return $this->request("GET", self::URL_CHARGES, $api_key = $this->culqi->api_key, $options);
+        return $this->request('GET', self::URL_CHARGES, $api_key = $this->culqi->api_key, $options);
     }
 
     /**
@@ -26,7 +26,7 @@ class Charges extends Resource {
      * @return create Charge response.
      */
     public function create($options = NULL) {
-        return $this->request("POST", self::URL_CHARGES, $api_key = $this->culqi->api_key, $options);
+        return $this->request('POST', self::URL_CHARGES, $api_key = $this->culqi->api_key, $options);
     }
 
     /**
@@ -35,7 +35,7 @@ class Charges extends Resource {
      * @return get a Charge.
      */
     public function get($id = NULL) {
-        return $this->request("GET", self::URL_CHARGES . $id . "/", $api_key = $this->culqi->api_key);
+        return $this->request('GET', self::URL_CHARGES . $id . '/', $api_key = $this->culqi->api_key);
     }
 
     /**
@@ -44,7 +44,7 @@ class Charges extends Resource {
      * @return get a capture of Charge.
      */
     public function capture($id = NULL) {
-        return $this->request("POST", self::URL_CHARGES . $id . "/capture/", $api_key = $this->culqi->api_key);
+        return $this->request('POST', self::URL_CHARGES . $id . '/capture/', $api_key = $this->culqi->api_key);
     }
 
     /**
@@ -54,7 +54,7 @@ class Charges extends Resource {
      * @return update Charge response.
      */
     public function update($id = NULL, $options = NULL) {
-        return $this->request("PATCH", self::URL_CHARGES . $id . "/", $api_key = $this->culqi->api_key, $options);
+        return $this->request('PATCH', self::URL_CHARGES . $id . '/', $api_key = $this->culqi->api_key, $options);
     }
 
 }
