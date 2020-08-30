@@ -55,13 +55,13 @@
                 // Recibimos Token del Culqi.js
                 function culqi() {
                     if(Culqi.token) {
+                        var installments = (Culqi.token.metadata.installments == undefined) ? 1 : Culqi.token.metadata.installments;
                         $(document).ajaxStart(function(){
                             run_waitMe();
                         });
                         $(document).ajaxComplete(function(){
                             $('body').waitMe('hide');
                         });
-                        var installments = (Culqi.token.metadata.installments == undefined) ? 1 : Culqi.token.metadata.installments;
                         $.ajax({
                             url: fnReplace("{/literal}{$link->getModuleLink('culqi', 'chargeajax', [], true)|escape:'htmlall':'UTF-8'}{literal}"),
                             data: {
@@ -83,17 +83,17 @@
                                 }
                                 if(data.constructor == Object){
                                     result = JSON.parse(JSON.stringify(data));
+                                    console.log(result);
                                 }
                                 if(result.object === 'charge'){
-                                $('body').waitMe('hide');
-                                showResult('green',result.outcome.user_message); 
-                                Culqi.close();
-                                redirect();
+                                    $('body').waitMe('hide');
+                                    showResult('green',result.outcome.user_message);
+                                    Culqi.close();
+                                    redirect();
                                 }
                                 if(result.object === 'error'){
-                                $('body').waitMe('hide');
-                                showResult('red',result.user_message);
-
+                                    $('body').waitMe('hide');
+                                    showResult('red',result.user_message);
                                 }
                             }
                             }
@@ -162,19 +162,19 @@
                 }
 
                 function run_waitMe() {
-                $('body').waitMe({
-                    effect: 'orbit',
-                    text: 'Procesando pago...',
-                    bg: 'rgba(255,255,255,0.7)',
-                    color:'#28d2c8'
-                });
+                    $('body').waitMe({
+                        effect: 'orbit',
+                        text: 'Procesando pago...',
+                        bg: 'rgba(255,255,255,0.7)',
+                        color:'#28d2c8'
+                    });
                 }
 
                 function showResult(style,message){
-                $('#showresult').removeClass('hide');
-                $('#showresultcontent').attr('class', '');
-                $('#showresultcontent').addClass(style);
-                $('#showresultcontent').html(message);
+                    $('#showresult').removeClass('hide');
+                    $('#showresultcontent').attr('class', '');
+                    $('#showresultcontent').addClass(style);
+                    $('#showresultcontent').html(message);
                 }
 
                 function redirect() {
@@ -189,6 +189,11 @@
 
                 function fnReplace(url) {
                     return url.replace(/&amp;/g, '&');
+                }
+
+                function storeLog(data) {
+                    // AJAX POST insert row to Database
+                    return 99;    // id inserted
                 }
 
             </script>
